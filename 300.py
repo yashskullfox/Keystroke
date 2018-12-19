@@ -1,6 +1,6 @@
-#False Acceptance and False Rejection rate at threshold=0.5 for N=100
+#False Acceptance and False Rejection rate at threshold=0.5 for N=300
 from scipy.spatial.distance import cityblock 
-import numpy as np
+#import numpy as np
 import pandas
 
 path = "/Users/yashpatel/Desktop/kdata.csv" 
@@ -9,16 +9,16 @@ subjects = data["subject"].unique()
 usr = []
 impr = []
 mean = []
-thr=0.3
+thr=15
 uvd = pandas.DataFrame()
 
 for subject in subjects:        
     genuine_usr_data = data.loc[data.subject == subject,"H.period":"H.Return"]
     impr_data = data.loc[data.subject != subject, :]
     training_values=[] 
-    training_values = genuine_usr_data[:200]                  #training sample set of data
-    test_genuine_values = genuine_usr_data[200:]              #testing sample for genuine usr data
-    test_impr = impr_data.loc[:,"H.period":"H.Return"] #impostor samples
+    training_values = genuine_usr_data[:100]                  #training sample set of data
+    test_genuine_values = genuine_usr_data[100:]              #testing sample for genuine usr data
+    test_impr = impr_data.loc[:,"H.period":"H.Return"]        #impostor samples
     
     #Calculate mean-vector
     mean = training_values.mean().values
@@ -31,23 +31,23 @@ for subject in subjects:
     for i in range(test_impr.shape[0]):
         I_score = cityblock(test_impr.iloc[i].values,mean)
         impr.append(I_score)
- #calculating FRR 
+    #calculating FRR 
     genuine_samples_rejected = 0
-    genuine_samples = usr[:200]
+    genuine_samples = usr[:300]
     for sample in genuine_samples:
         if sample >= thr:
             genuine_samples_rejected+=1
-    frr = genuine_samples_rejected/200.00
+    frr = genuine_samples_rejected/300.00
     #calculating FAR
     impr_samples_accepted = 0
-    impr_samples = impr[:10000]
+    impr_samples = impr[:15000]
     for sample in impr_samples:
         if sample > thr:
             impr_samples_accepted+=1
-    far = impr_samples_accepted/10000.00
-    uvd_temp = pandas.DataFrame({'false_acceptance':far,'false_rejection':frr},index = [subject]);
+    far = impr_samples_accepted/15000.00
+ =   uvd_temp = pandas.DataFrame({'false_acceptance':far,'false_rejection':frr},index = [subject]);
     uvd = pandas.concat([uvd,uvd_temp])
     usr=[]
     impr=[]
-print ("threshold=0.6 for N=200")
+print ("Threshold=0 for N=300")
 print (uvd)

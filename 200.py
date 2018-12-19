@@ -1,4 +1,4 @@
-#False Acceptance and False Rejection rate at threshold=0.5 for N=100
+#False Acceptance and False Rejection rate at threshold=0.5 for N=200
 from scipy.spatial.distance import cityblock 
 import numpy as np
 import pandas
@@ -9,7 +9,7 @@ subjects = data["subject"].unique()
 usr = []
 impr = []
 mean = []
-thr=0.3
+thr=15.5
 uvd = pandas.DataFrame()
 
 for subject in subjects:        
@@ -49,5 +49,5 @@ for subject in subjects:
     uvd = pandas.concat([uvd,uvd_temp])
     usr=[]
     impr=[]
-print ("threshold=0.6 for N=200")
+print ("threshold=0 for N=200")
 print (uvd)
